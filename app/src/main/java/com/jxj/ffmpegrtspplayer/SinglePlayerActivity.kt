@@ -118,8 +118,8 @@ class SinglePlayerActivity : AppCompatActivity(), SurfaceHolder.Callback {
             return
         }
 
-        // 创建流  true 软件解码
-        streamId = FFmpegRTSPLibrary.createStreamWithDecodeMode(url, 1280, 720, 30, 2000000, "h264",false)
+        // 创建流（useSoftwareDecode=false 硬解码）
+        streamId = FFmpegRTSPLibrary.createStreamWithDecodeMode(url, false)
         if (streamId >= 0) {
             updateStatus("流已创建，ID: $streamId")
             updateStreamInfo("URL: $url")

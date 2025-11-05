@@ -96,7 +96,7 @@ FfmpegRtspPlayer 是一个基于 FFmpeg 6.1.1 编译的 Android RTSP 播放器�
    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
    ```
 
-### 解码模式选择
+### 解码模式选择（精简版）
 
 #### 硬件解码模式（默认）
 - **优势**: 延迟最低（80-120ms），CPU占用少（<10%），功耗低
@@ -110,27 +110,27 @@ FfmpegRtspPlayer 是一个基于 FFmpeg 6.1.1 编译的 Android RTSP 播放器�
 
 #### 使用建议
 ```java
-// 推荐：优先使用硬件解码，兼容性更好
-int streamId = FFmpegRTSPLibrary.createStream(url, width, height, fps, bitrate, codec);
+// 推荐：优先使用硬件解码（默认）
+int streamId = FFmpegRTSPLibrary.createStream(url);
 
 // 明确指定：需要软件解码时
-int streamId = FFmpegRTSPLibrary.createStreamWithDecodeMode(url, width, height, fps, bitrate, codec, true);
+int streamId = FFmpegRTSPLibrary.createStreamWithDecodeMode(url, true);
 
 // 明确指定：需要硬件解码时
-int streamId = FFmpegRTSPLibrary.createStreamWithDecodeMode(url, width, height, fps, bitrate, codec, false);
+int streamId = FFmpegRTSPLibrary.createStreamWithDecodeMode(url, false);
 ```
 
 ### 基本使用
 
-#### 单流播放
+#### 单流播放（基础用法）
 ```java
 // 1. 创建流（默认硬件解码）
 String rtspUrl = "rtsp://your-server:554/stream";
-int streamId = FFmpegRTSPLibrary.createStream(rtspUrl, 1280, 720, 30, 2000000, "h264");
+int streamId = FFmpegRTSPLibrary.createStream(rtspUrl);
 
 // 或者指定解码模式
-int streamId = FFmpegRTSPLibrary.createStreamWithDecodeMode(rtspUrl, 1280, 720, 30, 2000000, "h264", false); // 硬件解码
-int streamId = FFmpegRTSPLibrary.createStreamWithDecodeMode(rtspUrl, 1280, 720, 30, 2000000, "h264", true);  // 软件解码
+int streamId = FFmpegRTSPLibrary.createStreamWithDecodeMode(rtspUrl, false); // 硬件解码
+int streamId = FFmpegRTSPLibrary.createStreamWithDecodeMode(rtspUrl, true);  // 软件解码
 
 // 2. 设置Surface
 SurfaceView surfaceView = findViewById(R.id.surface_view);
@@ -174,10 +174,10 @@ for (int i = 0; i < streamCount; i++) {
     int streamId;
     if (i % 2 == 0) {
         // 偶数流使用硬件解码
-        streamId = FFmpegRTSPLibrary.createStreamWithDecodeMode(url, 640, 480, 30, 1000000, "h264", false);
+        streamId = FFmpegRTSPLibrary.createStreamWithDecodeMode(url, false);
     } else {
         // 奇数流使用软件解码
-        streamId = FFmpegRTSPLibrary.createStreamWithDecodeMode(url, 640, 480, 30, 1000000, "h264", true);
+        streamId = FFmpegRTSPLibrary.createStreamWithDecodeMode(url, true);
     }
     streamIds.add(streamId);
     
@@ -255,19 +255,26 @@ protected void onDestroy() {
 }
 ```
 
-## API 参考
+## API 参考（精简版）
 
 ### 核心方法
 
 | 方法名 | 参数 | 返回值 | 说明 |
 |--------|------|--------|------|
-| `createStream` | url, width, height, fps, bitrate, codec | int | 创建流（默认硬件解码），返回流ID |
-| `createStreamWithDecodeMode` | url, width, height, fps, bitrate, codec, useSoftwareDecode | int | 创建流（指定解码模式），返回流ID |
+| `createStream` | url | int | 创建流（默认硬件解码），返回流ID |
+| `createStreamWithDecodeMode` | url, useSoftwareDecode | int | 创建流（指定解码模式），返回流ID |
 | `setSurface` | streamId, surface | int | 设置Surface到流 |
 | `startStream` | streamId | int | 同步开始播放 |
 | `stopStream` | streamId | int | 同步停止播放 |
 | `destroyStream` | streamId | int | 销毁指定流 |
 | `destroyAllStreams` | - | int | 销毁所有流 |
+
+### 便捷方法
+
+| 方法名 | 参数 | 返回值 | 说明 |
+|--------|------|--------|------|
+| `createStreamWithSurface` | url, surface | int | 一步创建流并绑定 Surface |
+| `createAndStartStream` | url, surface | int | 一步创建、绑定 Surface 并开始播放 |
 
 ### 异步方法
 

@@ -129,7 +129,7 @@ class MultiPlayerActivity : AppCompatActivity() {
         }
 
         // 创建流
-        val streamId = FFmpegRTSPLibrary.createStream(url, VIDEO_WIDTH, VIDEO_HEIGHT, 30, 1000000, "h264")
+        val streamId = FFmpegRTSPLibrary.createStream(url)
         if (streamId >= 0) {
             val streamItem = StreamItem(streamId, url, nextStreamId++)
             streamItems.add(streamItem)

@@ -439,7 +439,7 @@ protected void onDestroy() {
 ## 下一步计划
 
 ### 🔮 即将支持
-- **YUV 数据暴露**: 将解码后的 YUV 数据暴露到 Java 层，支持自定义渲染和处理
+- **YUV 数据暴露**: 将软件解码后的 YUV 数据暴露到 Java 层，支持自定义渲染和处理
 - **HTTPS 增强**: 完善 HTTPS 流媒体支持，包括证书验证和 TLS 配置
 - **WebSocket 流**: 支持 WebSocket 协议的视频流
 
